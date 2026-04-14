@@ -19,13 +19,25 @@ location, bhk, sqft, budget = sidebar_controls(df)
 # Train model
 model, columns, score = train_model(df)
 
+st.subheader("📊 Insights")
+ 
+avg_price = df.groupby("location")["price"].mean()
+ 
+st.bar_chart(avg_price)
+
 #display score
 st.subheader("📊 Model Performance")
 st.write(f"R² Score: {score}")
  
 # Prediction
 price = predict_price(model, columns, location, bhk, sqft)
+
+st.subheader("🔍 What-If Analysis")
  
+st.write(f"If area increases, price is likely to increase.")
+ 
+st.write(f"For {sqft} sqft and {bhk} BHK in {location}, estimated price is ₹{price} Lakhs")
+
 # Output
 st.subheader("💰 Estimated Price")
 st.metric(label="Predicted Price", value=f"₹ {price} Lakhs")
