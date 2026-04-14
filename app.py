@@ -8,6 +8,9 @@ from predictor import predict_price
 st.set_page_config(page_title="Real Estate Analyzer", layout="wide")
  
 st.title("🏡 Indian Real Estate Price Analyzer")
+st.subheader("📊 Model Performance")
+st.write(f"R² Score: {score}")
+ 
  
 # Load & preprocess data
 df = load_raw_data()
@@ -17,7 +20,7 @@ df = preprocess_data(df)
 location, bhk, sqft, budget = sidebar_controls(df)
  
 # Train model
-model, columns = train_model(df)
+model, columns, score = train_model(df)
  
 # Prediction
 price = predict_price(model, columns, location, bhk, sqft)
