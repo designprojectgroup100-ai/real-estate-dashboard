@@ -1,20 +1,31 @@
 import pandas as pd
  
+def convert_sqft(x):
+    try:
+        if '-' in str(x):
+            parts = x.split('-')
+            return (float(parts[0]) + float(parts[1])) / 2
+        return float(x)
+    except:
+        return None
+ 
 def load_raw_data():
     df = pd.read_csv("data/raw_data.csv")
  
-    # Extract BHK from 'size'
+    # Extract BHK
     df["bhk"] = df["size"].str.extract(r'(\d+)').astype(float)
  
-    # Rename columns
-    df.rename(columns={
-        "total_sqft": "sqft"
-    }, inplace=True)
+    # Rename column
+    df.rename(columns={"total_sqft": "sqft"}, inplace=True)
  
-    # Keep only needed columns
+    # Convert sqft properly
+    df["sqft"] = df["sqft"].apply(convert_sqft)
+ 
+    # Keep only required columns
     df = df[["location", "bhk", "sqft", "price"]]
  
-    # Drop missing values
+    # Remove missing values
     df.dropna(inplace=True)
  
     return df
+ 
