@@ -1,16 +1,20 @@
 import pandas as pd
  
 def load_raw_data():
-    return pd.read_csv("data/raw_data.csv")
+    df = pd.read_csv("data/raw_data.csv")
  
-def preprocess_data(df):
-    df = df.copy()
+    # Extract BHK from 'size'
+    df["bhk"] = df["size"].str.extract(r'(\d+)').astype(float)
  
-    # Basic cleaning (you can expand later)
-    df = df.dropna()
+    # Rename columns
+    df.rename(columns={
+        "total_sqft": "sqft"
+    }, inplace=True)
  
-    # Save processed data
-    df.to_csv("data/processed_data.csv", index=False)
+    # Keep only needed columns
+    df = df[["location", "bhk", "sqft", "price"]]
+ 
+    # Drop missing values
+    df.dropna(inplace=True)
  
     return df
- 
